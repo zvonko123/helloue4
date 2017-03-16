@@ -2,28 +2,21 @@
 
 #include "MyProject4.h"
 #include "MyPlayer.h"
-
+#include "Animation/AnimInstance.h"
+#include "GameFramework/InputSettings.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
-{
+{	
+
+	
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	newMesh = CreateDefaultSubobject<USkeletalMeshComponent>(FName("dreejMesh"));
-	RootComponent = newMesh;
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> newAsset(ANSI_TO_TCHAR("/Game/Meshes/dreej"));
-	// Create mesh component for the ball
-
-	if (newAsset.Succeeded())
-	{
-		newMesh->SetSkeletalMesh(newAsset.Object);
-		newMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		newMesh->SetMobility(EComponentMobility::Movable);
-		UE_LOG(LogTemp, Warning, TEXT("skeletal mesh succeeded"));
-	}
-
+	
+	RootComponent = GetCapsuleComponent();
+	
 	count = 0;
-	MoveImpulse = 2500.0f;
+	MoveImpulse = 250000.0f;
 
 	// Create a camera boom attached to the root (ball)
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm0"));
@@ -56,7 +49,7 @@ void AMyPlayer::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMyPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
@@ -65,15 +58,25 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AMyPlayer::MoveRight(float Val)
 {
-	UE_LOG(LogTemp, Warning, TEXT("move right called"));
+	UE_LOG(LogTemp, Warning, TEXT("move right called %f"), Val);
 	const FVector Impulse = FVector(-1.f * Val * MoveImpulse, 0.f, 0.f);
-	newMesh->AddImpulse(Impulse, NAME_None, false);
+	//newMesh->AddImpulse(Impulse, NAME_None, false);
+	if (Val != 0.0f)
+	{
+		// add movement in that direction
+		AddMovementInput(GetActorRightVector(), Val, true);
+	}
 }
 
 void AMyPlayer::MoveForward(float Val)
 {
-	UE_LOG(LogTemp, Warning, TEXT("move fwd called"));
+	UE_LOG(LogTemp, Warning, TEXT("move fwd called vall %f"), Val);
 	const FVector Impulse = FVector(0.f, Val * MoveImpulse, 0.f);
-	newMesh->AddImpulse(Impulse, NAME_None, false);
+	//newMesh->AddImpulse(Impulse, NAME_None, false);
+	if (Val != 0.0f)
+	{
+		AddMovementInput(GetActorForwardVector(), Val);
+		
+	}
 }
 

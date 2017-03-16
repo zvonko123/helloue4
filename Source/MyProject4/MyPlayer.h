@@ -4,8 +4,8 @@
 
 #include "GameFramework/Character.h"
 #include "MyPlayer.generated.h"
-
-UCLASS()
+class UInputComponent;
+UCLASS(config = Game)
 class MYPROJECT4_API AMyPlayer : public ACharacter
 {
 	GENERATED_BODY()
@@ -23,7 +23,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 	void MoveRight(float Val);
 
@@ -40,7 +40,6 @@ public:
 	bool flag;
 	int count;
 	float MoveImpulse;
-	UPROPERTY(EditAnywhere, Category = SkeletalMesh)
-		USkeletalMeshComponent* newMesh;
-	
+
+
 };

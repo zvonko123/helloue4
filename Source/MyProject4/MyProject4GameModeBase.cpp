@@ -7,7 +7,10 @@
 AMyProject4GameModeBase::AMyProject4GameModeBase()
 {
 // set default pawn class to our ball
-DefaultPawnClass = AMyPlayer::StaticClass();
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Script/MyProject4.MyCharacter"));
+	DefaultPawnClass = PlayerPawnClassFinder.Class;
+
+	
 }
 
 

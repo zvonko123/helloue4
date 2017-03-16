@@ -4,7 +4,7 @@
 #include "MyPlayer.h"
 #include "Animation/AnimInstance.h"
 #include "GameFramework/InputSettings.h"
-
+#include "RobotMesh.h"
 // Sets default values
 AMyPlayer::AMyPlayer()
 {	
@@ -14,6 +14,18 @@ AMyPlayer::AMyPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	RootComponent = GetCapsuleComponent();
+	
+	newMesh = CreateDefaultSubobject<USkeletalMeshComponent>(FName("dreejMesh"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> newAsset(ANSI_TO_TCHAR("/Game/Meshes/dreej"));
+	if (newAsset.Succeeded())
+	{
+		newMesh->SetSkeletalMesh(newAsset.Object);
+		newMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		newMesh->SetMobility(EComponentMobility::Movable);
+		UE_LOG(LogTemp, Warning, TEXT("skeletal mesh succeeded"));
+		newMesh->SetupAttachment(RootComponent);
+	}
+	
 	
 	count = 0;
 	MoveImpulse = 250000.0f;
@@ -38,6 +50,7 @@ AMyPlayer::AMyPlayer()
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	
 }
 

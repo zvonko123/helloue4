@@ -37,6 +37,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SkeletalMesh, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, Category = SkeletalMesh)
+		USkeletalMeshComponent* newMesh;
+
 	bool flag;
 	int count;
 	float MoveImpulse;
